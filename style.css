@@ -101,19 +101,23 @@ button { font: inherit; color: inherit; }
 }
 .intro-mark { width: 96px; height: 96px; border-radius: 22px; }
 .intro h1 {
-  margin: 0;
+  margin: 0 0 1.5rem;
   font-weight: 400;
-  font-size: clamp(3rem, 11vmin, 5.5rem);
+  font-size: clamp(4rem, 18vmin, 10rem);
   line-height: 1;
   letter-spacing: 0.04em;
   color: var(--bone);
+  -webkit-font-smoothing: none;
+  font-smooth: never;
+  text-shadow: 0.06em 0.06em 0 var(--tide);
 }
 .intro h1 span {
   display: block;
-  margin-top: 0.6rem;
-  font-size: 0.26em;
-  letter-spacing: 0.02em;
+  margin-top: 0.5rem;
+  font-size: 0.24em;
+  letter-spacing: 0.04em;
   color: var(--amber);
+  text-shadow: none;
 }
 .intro-copy {
   max-width: 34rem;
@@ -122,20 +126,6 @@ button { font: inherit; color: inherit; }
   line-height: 1.6;
   color: var(--foam);
 }
-.cover {
-  --cover-ar: var(--ar);
-  display: block;
-  width: min(100%, 640px, calc(55vh * var(--cover-ar)));
-  aspect-ratio: var(--cover-ar);
-  object-fit: fill;
-  background: #000;
-  border-radius: 6px;
-  box-shadow: 0 0 0 1px var(--tide), 0 0 0 9px #050c13, 0 0 0 10px rgb(29 69 96 / 0.6);
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
-  margin: 10px 10px 18px;
-}
-.cover[hidden] { display: none; }
 .intro-status {
   min-height: 1.6em;
   max-width: 34rem;
