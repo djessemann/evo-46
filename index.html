@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="E.V.O.">
+<meta name="theme-color" content="#081521">
+<title>E.V.O.</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icons/icon-192.png">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DotGothic16&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<main id="app" data-view="intro" data-has-game="false" data-shape="4x3">
+
+  <!-- First run and start screen -->
+  <section class="intro" aria-labelledby="title">
+    <img class="intro-mark" src="icons/icon-192.png" alt="" width="96" height="96">
+    <h1 id="title">E.V.O.<span>The Theory of Evolution</span></h1>
+    <p class="intro-copy" data-when="no-game">This plays your copy of the game. Pick the 46 OkuMen English zip, or the .hdi disk file inside it, from the Files app. It stays on this iPad.</p>
+    <p class="intro-copy" data-when="has-game">Your game is on this iPad. Progress saves when you use Save EVO in the game.</p>
+    <button class="cap cap-wide" id="play" data-when="has-game">Play</button>
+    <button class="cap cap-wide" id="pick" data-when="no-game">Choose game file</button>
+    <p class="intro-status" id="status" role="status" aria-live="polite"></p>
+    <input type="file" id="file" hidden>
+  </section>
+
+  <!-- Game -->
+  <section class="console" aria-label="Game">
+    <div class="screen-wrap">
+      <div class="screen"><canvas id="canvas" width="640" height="400"></canvas></div>
+    </div>
+
+    <div class="bar">
+      <span class="wordmark">E.V.O.</span>
+      <span class="saved" id="saved" aria-live="polite"></span>
+      <button class="cap cap-small" id="menu-btn" tabindex="-1">Menu</button>
+    </div>
+
+    <div class="pad" id="pad" role="group" aria-label="Direction keys">
+      <span class="cap key" data-dir="ul" style="--r:-135deg"><i>7</i><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      <span class="cap key" data-dir="up" style="--r:-90deg"><i>8</i><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      <span class="cap key" data-dir="ur" style="--r:-45deg"><i>9</i><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      <span class="cap key" data-dir="left" style="--r:180deg"><i>4</i><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      <span class="cap key key-blank"><i>5</i></span>
+      <span class="cap key" data-dir="right" style="--r:0deg"><i>6</i><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      <span class="cap key" data-dir="dl" style="--r:135deg"><i>1</i><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      <span class="cap key" data-dir="down" style="--r:90deg"><i>2</i><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+      <span class="cap key" data-dir="dr" style="--r:45deg"><i>3</i><svg viewBox="0 0 24 24"><path d="M4 12h15M13 6l6 6-6 6"/></svg></span>
+    </div>
+
+    <div class="actions" role="group" aria-label="Action keys">
+      <button class="cap key key-esc" data-key="esc" tabindex="-1">Esc<small>Back</small></button>
+      <button class="cap key key-ret" data-key="ret" tabindex="-1">Return<small>OK</small></button>
+      <button class="cap key key-space" data-key="space" tabindex="-1">Space<small>Commands</small></button>
+    </div>
+  </section>
+
+  <!-- Menu -->
+  <dialog id="menu" aria-labelledby="menu-title">
+    <form method="dialog" class="sheet">
+      <header>
+        <h2 id="menu-title">Menu</h2>
+        <button class="cap cap-small" value="resume">Resume</button>
+      </header>
+
+      <div class="rows">
+        <button type="button" class="row" id="do-backup">
+          <b>Back up save disk</b><span>Makes a copy you can keep in Files.</span>
+        </button>
+        <button type="button" class="row" id="do-restore">
+          <b>Restore from backup</b><span>Replaces your progress with a backup copy.</span>
+        </button>
+        <button type="button" class="row" id="do-reset">
+          <b>Restart game</b><span>Like pressing reset. Your EVO files stay.</span>
+        </button>
+        <label class="row row-toggle">
+          <span><b>4:3 monitor shape</b><span>Off shows the raw 640×400 picture.</span></span>
+          <input type="checkbox" id="shape" checked>
+        </label>
+      </div>
+
+      <div class="help">
+        <h3>Controls</h3>
+        <p>Number keys move. Slide your thumb across them to change direction. Return confirms and moves text along. Space opens commands. Esc backs out.</p>
+        <p>With a hardware keyboard, arrow keys move too.</p>
+      </div>
+
+      <div class="rows rows-danger">
+        <button type="button" class="row" id="do-erase">
+          <b>Erase all progress</b><span>Goes back to the untouched disk.</span>
+        </button>
+        <button type="button" class="row" id="do-remove">
+          <b>Remove game from this iPad</b><span>Deletes the disk and your progress.</span>
+        </button>
+      </div>
+    </form>
+  </dialog>
+  <input type="file" id="restore-file" hidden>
+</main>
+<script type="module" src="app.js"></script>
+</body>
+</html>

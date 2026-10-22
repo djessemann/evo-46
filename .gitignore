@@ -1,0 +1,7 @@
+# Never commit the game itself
+*.hdi
+*.hdm
+*.fdi
+*.d88
+*.zip
+.DS_Store
