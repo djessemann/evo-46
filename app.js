@@ -127,7 +127,29 @@ function setBusy(on) { intro.classList.toggle('busy', on); }
 function showIntro(hasGame) {
   app.dataset.view = 'intro';
   app.dataset.hasGame = String(hasGame);
+  showCover();
 }
+
+/* Cover: a screenshot of your own game, taken from the Menu. Stays on this iPad. */
+async function showCover() {
+  const img = $('cover');
+  const png = await loadFile('cover').catch(() => null);
+  if (img.src) URL.revokeObjectURL(img.src);
+  if (png) {
+    img.src = URL.createObjectURL(new Blob([png], { type: 'image/png' }));
+    img.hidden = false;
+  } else {
+    img.removeAttribute('src');
+    img.hidden = true;
+  }
+}
+
+// Keep the last drawn frame readable so the Menu can screenshot the game canvas.
+const nativeGetContext = HTMLCanvasElement.prototype.getContext;
+HTMLCanvasElement.prototype.getContext = function (type, attrs) {
+  if (this.id === 'canvas' && /webgl/i.test(type)) attrs = Object.assign({}, attrs, { preserveDrawingBuffer: true });
+  return nativeGetContext.call(this, type, attrs);
+};
 
 $('pick').addEventListener('click', () => $('file').click());
 
@@ -409,6 +431,18 @@ $('restore-file').addEventListener('change', async (e) => {
   }
 });
 
+$('do-cover').addEventListener('click', async () => {
+  const blob = await new Promise((resolve) => $('canvas').toBlob(resolve, 'image/png'));
+  if (!blob) { alert('Couldn’t capture the screen.'); return; }
+  try {
+    await storeFile('cover', await blob.arrayBuffer());
+    menu.close();
+  } catch (err) {
+    console.error(err);
+    alert('Couldn’t save the cover. Free up space on this iPad.');
+  }
+});
+
 $('do-reset').addEventListener('click', async () => {
   await persist();
   menu.close();
@@ -428,6 +462,7 @@ $('do-remove').addEventListener('click', async () => {
   halted = true;
   await deleteFile('disk');
   await deleteFile('original');
+  await deleteFile('cover');
   reloadApp();
 });
 

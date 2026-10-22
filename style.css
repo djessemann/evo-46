@@ -122,6 +122,19 @@ button { font: inherit; color: inherit; }
   line-height: 1.6;
   color: var(--foam);
 }
+.cover {
+  display: block;
+  width: min(100%, 640px);
+  aspect-ratio: var(--ar);
+  object-fit: fill;
+  background: #000;
+  border-radius: 6px;
+  box-shadow: 0 0 0 1px var(--tide), 0 0 0 9px #050c13, 0 0 0 10px rgb(29 69 96 / 0.6);
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+  margin: 10px 10px 18px;
+}
+.cover[hidden] { display: none; }
 .intro-status {
   min-height: 1.6em;
   max-width: 34rem;
