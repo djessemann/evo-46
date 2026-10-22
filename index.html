@@ -75,8 +75,11 @@
         <button type="button" class="row" id="do-restore">
           <b>Restore from backup</b><span>Replaces your progress with a backup copy.</span>
         </button>
+        <button type="button" class="row" id="do-cover-file">
+          <b>Choose cover image</b><span>Pick a picture from Files for the start screen.</span>
+        </button>
         <button type="button" class="row" id="do-cover">
-          <b>Use this screen as cover</b><span>Shows it on the start screen.</span>
+          <b>Use this screen as cover</b><span>Shows the current screen on the start screen.</span>
         </button>
         <button type="button" class="row" id="do-reset">
           <b>Restart game</b><span>Like pressing reset. Your EVO files stay.</span>
@@ -98,6 +101,7 @@
     </form>
   </dialog>
   <input type="file" id="restore-file" hidden>
+  <input type="file" id="cover-file" accept="image/*" hidden>
 </main>
 <script type="module" src="app.js"></script>
 </body>

@@ -123,9 +123,10 @@ button { font: inherit; color: inherit; }
   color: var(--foam);
 }
 .cover {
+  --cover-ar: var(--ar);
   display: block;
-  width: min(100%, 640px);
-  aspect-ratio: var(--ar);
+  width: min(100%, 640px, calc(55vh * var(--cover-ar)));
+  aspect-ratio: var(--cover-ar);
   object-fit: fill;
   background: #000;
   border-radius: 6px;

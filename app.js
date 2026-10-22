@@ -135,13 +135,33 @@ async function showCover() {
   const img = $('cover');
   const png = await loadFile('cover').catch(() => null);
   if (img.src) URL.revokeObjectURL(img.src);
-  if (png) {
-    img.src = URL.createObjectURL(new Blob([png], { type: 'image/png' }));
-    img.hidden = false;
-  } else {
+  if (!png) {
     img.removeAttribute('src');
     img.hidden = true;
+    return;
   }
+  img.src = URL.createObjectURL(new Blob([png], { type: 'image/png' }));
+  try { await img.decode(); } catch { img.hidden = true; return; }
+  // A 640x400 emulator screenshot follows the monitor-shape setting; any other picture keeps its own shape.
+  const screenshot = img.naturalWidth === 640 && img.naturalHeight === 400;
+  img.style.setProperty('--cover-ar', screenshot ? 'var(--ar)' : `${img.naturalWidth} / ${img.naturalHeight}`);
+  img.hidden = false;
+}
+
+async function saveCover(blob) {
+  await storeFile('cover', await blob.arrayBuffer());
+}
+
+// Any picture from Files becomes a PNG no wider than 1280px.
+async function imageToPng(file) {
+  const bmp = await createImageBitmap(file);
+  const scale = Math.min(1, 1280 / Math.max(bmp.width, bmp.height));
+  const c = document.createElement('canvas');
+  c.width = Math.round(bmp.width * scale);
+  c.height = Math.round(bmp.height * scale);
+  c.getContext('2d').drawImage(bmp, 0, 0, c.width, c.height);
+  bmp.close?.();
+  return new Promise((resolve) => c.toBlob(resolve, 'image/png'));
 }
 
 // Keep the last drawn frame readable so the Menu can screenshot the game canvas.
@@ -435,11 +455,28 @@ $('do-cover').addEventListener('click', async () => {
   const blob = await new Promise((resolve) => $('canvas').toBlob(resolve, 'image/png'));
   if (!blob) { alert('Couldn’t capture the screen.'); return; }
   try {
-    await storeFile('cover', await blob.arrayBuffer());
+    await saveCover(blob);
     menu.close();
   } catch (err) {
     console.error(err);
     alert('Couldn’t save the cover. Free up space on this iPad.');
+  }
+});
+
+$('do-cover-file').addEventListener('click', () => $('cover-file').click());
+
+$('cover-file').addEventListener('change', async (e) => {
+  const file = e.target.files[0];
+  e.target.value = '';
+  if (!file) return;
+  try {
+    const blob = await imageToPng(file);
+    if (!blob) throw new Error('toBlob failed');
+    await saveCover(blob);
+    menu.close();
+  } catch (err) {
+    console.error(err);
+    alert('Couldn’t use that picture. Try a JPG or PNG.');
   }
 });
 

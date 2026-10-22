@@ -1,6 +1,6 @@
 // Offline support: keeps the app and emulator on the iPad.
 // Bump VERSION whenever any file changes so iPads pick up the update.
-const VERSION = 'evo-v4';
+const VERSION = 'evo-v5';
 const FILES = [
   './',
   'index.html',
