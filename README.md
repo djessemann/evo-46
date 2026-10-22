@@ -22,7 +22,7 @@ The workflow copies only the app files to the site. The zip and anything else in
 
 1. Open the link in Safari.
 2. Tap **Share → Add to Home Screen**.
-3. Open it from the Home Screen. Tap **Choose game file** and pick your E.V.O. `.hdi` (or a zip with the `.hdi` inside it) from Files.
+3. Open it from the Home Screen. Tap **Upload HDI** and pick your E.V.O. `.hdi` (or a zip with the `.hdi` inside it) from Files.
 4. Tap **Play**.
 
 Use the Home Screen version. Safari can clear data for websites you haven't opened in a while, but it keeps Home Screen apps' data.
